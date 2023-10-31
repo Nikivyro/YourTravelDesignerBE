@@ -4,6 +4,8 @@ const logger = require('./middlewares/logger')
 
 const usersRoute = require('./routes/users')
 const experienceRouter = require('./routes/experiences')
+const loginRoute = require('./routes/login')
+const registerRoute = require('./routes/register')
 
 const cors = require('cors')
 
@@ -17,6 +19,8 @@ app.use(logger)
 
 app.use('/', usersRoute)
 app.use('/', experienceRouter)
+app.use('/', loginRoute)
+app.use('/', registerRoute)
 
 mongoose.connect(process.env.MONGODB_URL, {
     useNewUrlParser: true,

@@ -3,6 +3,54 @@ GET  http://localhost:5050/experiences HTTP/1.1
 Content-Type: application/json
 
 ####
+POST  http://localhost:5050/experiences/create HTTP/1.1
+Content-Type: application/json
+
+{
+    "name": "Esperienza Test",
+    "type": "Tour",
+    "category": "Cultura",
+    "gallery": [
+        {
+            "filename": "immagine1.jpg",
+            "imageUrl": "URL1"
+        },
+        {
+            "filename": "immagine2.jpg",
+            "imageUrl": "URL2"
+        }
+    ],
+    "description": "Una descrizione dell'esperienza di test",
+    "price": 150,
+    "location": {
+        "country": "ID_DEL_PAESE",  // Sostituisci con l'ID del paese dal database
+        "city": "ID_DELLA_CITTA"      // Sostituisci con l'ID della città dal database
+    },
+    "itineraryStops": [
+        {
+            "day": "ID_DEL_GIORNO"      // Sostituisci con l'ID del giorno dal database
+        }
+    ],
+    "tourDetails": {
+        "services": [
+            {
+                "service": "ID_DEL_SERVIZIO",  // Sostituisci con l'ID del servizio dal database
+                "included": true
+            }
+        ],
+        "meetingPoint": {
+            "latitude": "LATITUDINE",
+            "longitude": "LONGITUDINE"
+        },
+        "people": 10,
+        "duration": "2 ore",
+        "languages": "Inglese"
+    },
+    "calendar": "ID_DEL_CALENDARIO",  // Sostituisci con l'ID del calendario dal database
+    "supplier": "ID_DEL_FORNITORE"    // Sostituisci con l'ID del fornitore dal database
+}
+
+####
 GET  http://localhost:5050/users HTTP/1.1
 Content-Type: application/json
 
@@ -16,4 +64,13 @@ Content-Type: application/json
   "email": "mariorossi@gmail.com",
   "password": "lamiapassword",
   "role": "Agenzia"
+}
+
+####
+POST http://localhost:5050/login HTTP/1.1
+Content-Type: application/json
+
+{
+  "email": "mariorossi@gmail.com",
+  "password": "lamiapassword"
 }

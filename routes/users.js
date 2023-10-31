@@ -1,7 +1,7 @@
 const express = require('express')
 const userModel = require('../models/user')
 const user = express.Router()
-
+const bcrypt = require('bcrypt')
 
 user.get('/users', async (req,res)=>{
     try {
@@ -20,14 +20,14 @@ user.get('/users', async (req,res)=>{
 })
 user.post('/users/create', async (req, res)=>{
     
-    // const salt = await bcrypt.genSalt(10)
-    // const hashedPassword = await bcrypt.hash(req.body.password, salt)
+    const salt = await bcrypt.genSalt(10)
+    const hashedPassword = await bcrypt.hash(req.body.password, salt)
 
     const newUser = new userModel({
         firstName: req.body.firstName,
         lastName: req.body.lastName,
         email: req.body.email,
-        password: req.body.password,
+        password: hashedPassword,
         role: req.body.role
     })
 

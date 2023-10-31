@@ -19,4 +19,23 @@ experience.get('/experiences', async (req, res)=>{
     }
 })
 
+experience.post('/experiences/create', async (req, res) => {
+    try {
+        // Estrai i dati dalla richiesta HTTP
+        const experienceData = req.body;
+
+        // Crea una nuova Experience con i dati forniti
+        const newExperience = new experienceModel(experienceData);
+
+        // Salva la nuova Experience nel database
+        await newExperience.save();
+
+        res.status(201).json(newExperience);
+    } catch (err) {
+        console.error("Errore durante la creazione dell'esperienza:", err);
+        res.status(500).json({ error: 'Errore durante la creazione dell\'esperienza' });
+    }
+});
+
+
 module.exports = experience

@@ -10,25 +10,97 @@ const ExperienceSchema = new mongoose.Schema({
         enum: ["Tour", "Itinerario", "Pacchetto"],
         required: true
     },
-    cover: {
+    category: {
         type: String,
+        enum: ["Cultura", "Gastronomia", "Natura", "Sport"],
         required: true
     },
+    gallery: [
+        {
+            filename: {
+                type: String,
+                required: true
+            },
+            imageUrl: {
+                type: String,
+                required: true
+            }
+        }
+    ],
     description: {
         type: String,
         required: true
     },
-    tourDetails: {
-        serviecs: [
-            {
+    price: {
+        type: Number,
+        required: true
+    },
+    location: {
+        country: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'countrySchema'
+        },
+        city: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'citySchema'
+        },
+    },
+    itineraryStops: [
+        {
+            day: {
                 type: String,
                 required: true
+            },
+            stops: [
+                {
+                    name: {
+                        type: String,
+                        required: true
+                    },
+                    description: {
+                        type: String,
+                        required: true
+                    },
+                    location:  [
+                        {
+                            latitude: {
+                                type: String,
+                                required: true
+                            },
+                            longitude: {
+                                type: String,
+                                required: true
+                            }
+                        }
+                    ],
+                }
+            ]
+        }
+    ],
+    tourDetails: {
+        services: [
+            {
+                service: {
+                    type: mongoose.Schema.Types.ObjectId,
+                    ref: 'serviceSchema'
+                },
+                included: {
+                    type: Boolean
+                }
             }
         ],
-        meetingPoint: {
-            type: String,
-            required: true
-        },
+        meetingPoint: [
+            {
+                latitude: {
+                    type: String,
+                    required: true
+                },
+                longitude: {
+                    type: String,
+                    required: true
+                }
+            }
+        ],
         people: {
             type: Number,
             required: true
@@ -53,4 +125,4 @@ const ExperienceSchema = new mongoose.Schema({
     }
 })
 
-module.exports = mongoose.model('experienceModel', ExperienceSchema, "experiences")
+module.exports = mongoose.model('experienceModel', ExperienceSchema, 'experiences')

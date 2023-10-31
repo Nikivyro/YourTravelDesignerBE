@@ -6,6 +6,7 @@ const CalendarSchema = new mongoose.Schema({
       ref: 'experienceModel',
     },
     availableDates: [Date],
+    blockedDates: [Date],
 });
 
-module.exports = mongoose.model('calendarSchema', CalendarSchema, "calendars")
+module.exports = mongoose.model('calendarSchema', CalendarSchema, 'calendars')
