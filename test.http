@@ -3,11 +3,106 @@ GET  http://localhost:5050/experiences HTTP/1.1
 Content-Type: application/json
 
 ####
+GET  http://localhost:5050/experiences/?city=Roma HTTP/1.1
+Content-Type: application/json
+
+####
+GET  http://localhost:5050/experiences/6549094adf4fade1400f94d7 HTTP/1.1
+Content-Type: application/json
+
+####
 POST  http://localhost:5050/experiences/create HTTP/1.1
 Content-Type: application/json
 
 {
-    "name": "Esperienza Test",
+  "name": "Avventura Rafting",
+  "type": "Tour",
+  "category": "Sport",
+  "gallery": [
+    {
+      "filename": "rafting1.jpg",
+      "imageUrl": "img/rafting/rafting1.jpg"
+    },
+    {
+      "filename": "rafting2.jpg",
+      "imageUrl": "img/rafting/rafting2.jpg"
+    }
+  ],
+  "description": "Affronta le rapide in un'emozionante avventura di rafting lungo il fiume.",
+  "price": 90,
+  "location": {
+    "city": "654ce58b9cd0773de7071583"
+  },
+  "itineraryStops": [
+    {
+      "day": "Giorno 1",
+      "stops": [
+        {
+          "name": "Avvicinamento al fiume",
+          "description": "Preparazione e briefing sull'attività.",
+          "location": {
+            "latitude": "40.8215",
+            "longitude": "-73.9993"
+          }
+        },
+        {
+          "name": "Inizio del Rafting",
+          "description": "Navigazione sulle rapide.",
+          "location": {
+            "latitude": "40.8290",
+            "longitude": "-74.0062"
+          }
+        }
+      ]
+    },
+    {
+      "day": "Giorno 2",
+      "stops": [
+        {
+          "name": "Conclusione e commenti",
+          "description": "Esperienza e commenti finali.",
+          "location": {
+            "latitude": "40.8247",
+            "longitude": "-73.9980"
+          }
+        }
+      ]
+    }
+  ],
+  "tourDetails": {
+    "services": [
+      {
+        "service": "Istruttore di rafting",
+        "included": true
+      },
+      {
+        "service": "Attrezzatura",
+        "included": true
+      }
+    ],
+    "meetingPoint": [
+      {
+        "address": "Base del Rafting",
+        "latitude": "40.8222",
+        "longitude": "-74.0001"
+      }
+    ],
+    "people": 8,
+    "duration": "2 giorni",
+    "languages": "Inglese"
+  },
+  "supplier": "6540e1fb26cf015e0154da9c"
+}
+
+
+
+
+####
+PATCH  http://localhost:5050/experiences/edit/6549094adf4fade1400f94d7 HTTP/1.1
+Content-Type: application/json
+
+{
+    "name": "Esperienza Test Roma MOD",
     "type": "Tour",
     "category": "Cultura",
     "gallery": [
@@ -20,38 +115,67 @@ Content-Type: application/json
             "imageUrl": "URL2"
         }
     ],
-    "description": "Una descrizione dell'esperienza di test",
+    "description": "Una descrizione dell'esperienza di test per Roma MOD",
     "price": 150,
     "location": {
-        "country": "ID_DEL_PAESE",  // Sostituisci con l'ID del paese dal database
-        "city": "ID_DELLA_CITTA"      // Sostituisci con l'ID della città dal database
+        "city": "6549078c34bcba0723904020" 
     },
-    "itineraryStops": [
+  "itineraryStops": [
+    {
+      "day": "Day 1",
+      "stops": [
         {
-            "day": "ID_DEL_GIORNO"      // Sostituisci con l'ID del giorno dal database
+          "name": "Tour Stop 1",
+          "description": "Description of Tour Stop 1",
+          "location": [
+            {
+              "latitude": "123.456",
+              "longitude": "789.012"
+            }
+          ]
+        },
+        {
+          "name": "Tour Stop 2",
+          "description": "Description of Tour Stop 2",
+          "location": [
+            {
+              "latitude": "456.789",
+              "longitude": "012.345"
+            }
+          ]
         }
-    ],
+      ]
+    }
+  ],
     "tourDetails": {
         "services": [
             {
-                "service": "ID_DEL_SERVIZIO",  // Sostituisci con l'ID del servizio dal database
+                "service": "Pranzo",
                 "included": true
+            },
+            {
+                "service": "Bevande",
+                "included": false
             }
         ],
         "meetingPoint": {
-            "latitude": "LATITUDINE",
-            "longitude": "LONGITUDINE"
+            "address": "Via di prova, 12",
+            "latitude": "41.9102088",
+            "longitude": "12.3711878"
         },
-        "people": 10,
-        "duration": "2 ore",
-        "languages": "Inglese"
+        "people": 12,
+        "duration": "8 ore",
+        "languages": "Italiano"
     },
-    "calendar": "ID_DEL_CALENDARIO",  // Sostituisci con l'ID del calendario dal database
-    "supplier": "ID_DEL_FORNITORE"    // Sostituisci con l'ID del fornitore dal database
+    "supplier": "6540e1fb26cf015e0154da9c"
 }
 
 ####
 GET  http://localhost:5050/users HTTP/1.1
+Content-Type: application/json
+
+####
+GET  http://localhost:5050/users/6540e1fb26cf015e0154da9c HTTP/1.1
 Content-Type: application/json
 
 ####
@@ -73,4 +197,35 @@ Content-Type: application/json
 {
   "email": "mariorossi@gmail.com",
   "password": "lamiapassword"
+}
+
+
+####
+GET  http://localhost:5050/services HTTP/1.1
+Content-Type: application/json
+
+####
+GET  http://localhost:5050/countries HTTP/1.1
+Content-Type: application/json
+
+####
+GET  http://localhost:5050/cities HTTP/1.1
+Content-Type: application/json
+
+####
+POST  http://localhost:5050/country/create HTTP/1.1
+Content-Type: application/json
+
+{
+  "name": "Portogallo"
+}
+
+####
+POST  http://localhost:5050/city/create HTTP/1.1
+Content-Type: application/json
+
+{
+  "name": "Roma",
+  "country": "6549071d34bcba0723904002",
+  "cover": "aspibasuèvbsèuvbsèb.jpg"
 }

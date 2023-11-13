@@ -15,18 +15,10 @@ const ExperienceSchema = new mongoose.Schema({
         enum: ["Cultura", "Gastronomia", "Natura", "Sport"],
         required: true
     },
-    gallery: [
-        {
-            filename: {
-                type: String,
-                required: true
-            },
-            imageUrl: {
-                type: String,
-                required: true
-            }
-        }
-    ],
+    cover: {
+        type: String,
+        default: 'img/placeholder.jpg'
+    },
     description: {
         type: String,
         required: true
@@ -36,10 +28,6 @@ const ExperienceSchema = new mongoose.Schema({
         required: true
     },
     location: {
-        country: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'countrySchema'
-        },
         city: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'citySchema'
@@ -47,42 +35,39 @@ const ExperienceSchema = new mongoose.Schema({
     },
     itineraryStops: [
         {
-            day: {
+          day: {
+            type: String,
+            required: true
+          },
+          stops: [
+            {
+              name: {
                 type: String,
                 required: true
-            },
-            stops: [
-                {
-                    name: {
-                        type: String,
-                        required: true
-                    },
-                    description: {
-                        type: String,
-                        required: true
-                    },
-                    location:  [
-                        {
-                            latitude: {
-                                type: String,
-                                required: true
-                            },
-                            longitude: {
-                                type: String,
-                                required: true
-                            }
-                        }
-                    ],
+              },
+              description: {
+                type: String,
+                required: true
+              },
+              location: {
+                latitude: {
+                  type: String,
+                  required: true
+                },
+                longitude: {
+                  type: String,
+                  required: true
                 }
-            ]
+              },
+            }
+          ]
         }
     ],
     tourDetails: {
         services: [
             {
                 service: {
-                    type: mongoose.Schema.Types.ObjectId,
-                    ref: 'serviceSchema'
+                    type: String,
                 },
                 included: {
                     type: Boolean
@@ -91,13 +76,14 @@ const ExperienceSchema = new mongoose.Schema({
         ],
         meetingPoint: [
             {
+                address: {
+                    type: String,
+                },
                 latitude: {
                     type: String,
-                    required: true
                 },
                 longitude: {
                     type: String,
-                    required: true
                 }
             }
         ],
@@ -118,6 +104,7 @@ const ExperienceSchema = new mongoose.Schema({
     calendar: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'calendarModel',
+        required: false
     },
     supplier: {
         type: mongoose.Schema.Types.ObjectId,

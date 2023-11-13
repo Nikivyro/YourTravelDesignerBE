@@ -5,6 +5,10 @@ const CitySchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    cover: {
+        type: String,
+        required: true
+    },
     country: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'countrySchema'
