@@ -123,6 +123,14 @@ experience.get('/experiences/:experienceId', async (req, res)=> {
     }
     try {
         const experience = await experienceModel.findById(experienceId)
+            .populate('supplier')
+            .populate({
+                path: 'location',
+                populate: {
+                    path: 'city',
+                    model: 'citySchema'
+                }
+            });
 
         res.status(200).send({
             statusCode: 200,
@@ -155,49 +163,61 @@ experience.post('/experiences/create', async (req, res) => {
 });
 
 // PATCH
-experience.patch('/experiences/edit/:experienceId', async (req, res) => {
+experience.patch('/experiences/edit/:experienceId', cloudUpload.single('cover'), async (req, res) => {
     try {
-        const { experienceId } = req.params;
-        const existingExperience = await experienceModel.findById(experienceId);
+        const experienceId = req.params.experienceId;
 
+        // Verifica se req.file è definito
+        if (req.file) {
+            const result = await cloudinary.uploader.upload(req.file.path);
+            if (!result || !result.secure_url) {
+                return res.status(500).json({
+                    statusCode: 500,
+                    message: "Errore nell'upload dell'immagine su Cloudinary"
+                });
+            }
+            req.body.cover = result.secure_url;
+        }
+
+        // Verifica se l'esperienza esiste
+        const existingExperience = await experienceModel.findById(experienceId);
         if (!existingExperience) {
             return res.status(404).json({
                 statusCode: 404,
-                message: "Esperienza non trovata."
+                message: "Experience non trovata."
             });
         }
 
+        // Validazione dei dati
         const dataToUpdate = req.body;
-        const gallery = req.body.gallery; // Array di immagini da aggiungere o rimuovere
-
-        // Se la richiesta include una galleria da modificare
-        if (gallery && gallery.length > 0) {
-            // Aggiungi o rimuovi le immagini dalla galleria dell'esperienza
-            if (dataToUpdate.$push) {
-                dataToUpdate.$push.gallery = { $each: gallery };
-            }
-            if (dataToUpdate.$pull) {
-                dataToUpdate.$pull.gallery = { $in: gallery };
-            }
+        if (!dataToUpdate || Object.keys(dataToUpdate).length === 0) {
+            return res.status(400).json({
+                statusCode: 400,
+                message: "I dati da aggiornare non sono validi."
+            });
         }
 
-        // Aggiorna i dettagli dell'esperienza, inclusa la galleria
+        // Aggiorna l'esperienza
         const options = { new: true };
         const updatedExperience = await experienceModel.findByIdAndUpdate(experienceId, dataToUpdate, options);
 
         res.status(200).json(updatedExperience);
-    } catch (err) {
-        console.error("Errore durante l'aggiornamento dell'esperienza:", err);
-        res.status(500).json({ error: 'Errore durante l\'aggiornamento dell\'esperienza' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            statusCode: 500,
+            message: "Errore interno del server"
+        });
     }
 });
+
 
 // DELETE
 experience.delete('/experiences/delete/:experienceId', async (req, res) => {
     const { experienceId } = req.params
        
     try {
-        const experience = await PostModel.findByIdAndDelete(experienceId)
+        const experience = await experienceModel.findByIdAndDelete(experienceId)
         if (!experience) {
             return res.status(404).send({
                 statusCode: 404,
@@ -321,12 +341,55 @@ experience.get('/experiences/category/:category', async (req, res) => {
     }
 });
 
+
+
 experience.get('/experiences/city/:cityName', async (req, res) => {
     try {
         const cityName = req.params.cityName;
+        let query = {};
 
-        // Effettua una query nel tuo modello di esperienze per trovare quelle associate alla città
-        const experiences = await experienceModel.find({ 'location.city.name': cityName })
+        const city = await cityModel.findOne({ name: cityName });
+
+        if (city) {
+            const cityId = city._id;
+
+            query = { 'location.city': cityId };
+
+            const experiences = await experienceModel.find(query)
+                .populate('supplier')
+                .populate({
+                    path: 'location',
+                    populate: {
+                        path: 'city',
+                        model: 'citySchema'
+                    }
+                });
+
+            res.status(200).send({
+                statusCode: 200,
+                cityId,
+                experiences
+            });
+        } else {
+            return res.status(404).send({
+                statusCode: 404,
+                message: "Città non trovata"
+            });
+        }
+    } catch (e) {
+        res.status(500).send({
+            statusCode: 500,
+            message: "Internal server error"
+        });
+    }
+});
+
+experience.get('/experiences/city/:cityName/related/:experienceId', async (req, res) => {
+    try {
+        const { cityName, experienceId } = req.params
+        const query = { 'location.city.name': cityName, _id: { $ne: experienceId } };
+
+        const experiences = await experienceModel.find(query)
             .populate('supplier')
             .populate({
                 path: 'location',
@@ -335,7 +398,7 @@ experience.get('/experiences/city/:cityName', async (req, res) => {
                     model: 'citySchema'
                 }
             });
-
+        console.log(experiences);
         // Invia le esperienze associate a quella città come risposta
         res.status(200).json({ experiences });
     } catch (error) {
@@ -343,5 +406,6 @@ experience.get('/experiences/city/:cityName', async (req, res) => {
         res.status(500).json({ message: "Errore interno del server" });
     }
 });
+
 
 module.exports = experience

@@ -9,6 +9,10 @@ const  UserSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    businessName: {
+        type: String,
+        required: true,
+    },
     email: {
         type: String,
         required: true,
@@ -17,8 +21,10 @@ const  UserSchema = new mongoose.Schema({
         type: String,
         default: "https://cdn.iconscout.com/icon/free/png-512/free-avatar-370-456322.png"
     },
-    birthDate: {
-        type: String
+    phone: {
+        type: Number,
+        required: true,
+        minlength: 9
     },
     password: {
         type: String,

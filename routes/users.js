@@ -41,7 +41,7 @@ user.get('/user/profile', authenticateUser, async (req, res) => {
         message: 'Internal server error',
       });
     }
-  });
+});
 
 user.post('/user/create', async (req, res)=>{
     

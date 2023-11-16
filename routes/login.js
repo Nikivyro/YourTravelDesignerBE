@@ -5,7 +5,7 @@ const UserModel = require('../models/user');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
-login.post('/login', async (req, res) => {
+login.post('/user/login', async (req, res) => {
   const user = await UserModel.findOne({ email: req.body.email });
 
   if (!user) {

@@ -37,26 +37,21 @@ const ExperienceSchema = new mongoose.Schema({
         {
           day: {
             type: String,
-            required: true
           },
           stops: [
             {
               name: {
                 type: String,
-                required: true
               },
               description: {
                 type: String,
-                required: true
               },
               location: {
                 latitude: {
                   type: String,
-                  required: true
                 },
                 longitude: {
                   type: String,
-                  required: true
                 }
               },
             }

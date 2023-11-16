@@ -236,5 +236,22 @@ location.post('/cities/cloudUpload', cloudUpload.single('cover'), async (req, re
     }
 });
 
+location.get('/cities/:cityName', async (req, res) => {
+    const cityName = req.params.cityName;
+  
+    try {
+      const city = await cityModel.findOne({ name: cityName }).populate('country');
+  
+      if (!city) {
+        return res.status(404).json({ message: 'Città non trovata' });
+      }
+  
+      res.json(city);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Errore del server' });
+    }
+  });
+
 
 module.exports = location

@@ -11,6 +11,33 @@ GET  http://localhost:5050/experiences/6549094adf4fade1400f94d7 HTTP/1.1
 Content-Type: application/json
 
 ####
+GET  http://localhost:5050/experiences/city/Roma/related/6551debe7fef1f3545ef1b07 HTTP/1.1
+Content-Type: application/json
+
+####
+GET  http://localhost:5050/experiences/city/Roma/related/6551debe7fef1f3545ef1b07 HTTP/1.1
+Content-Type: application/json
+
+####
+GET  http://localhost:5050/cities/Roma HTTP/1.1
+Content-Type: application/json
+
+####
+GET  http://localhost:5050/experiences/city/Roma HTTP/1.1
+Content-Type: application/json
+
+####
+GET  http://localhost:5050/experiences/category/Sport HTTP/1.1
+Content-Type: application/json
+
+####
+GET  http://localhost:5050/experiences/type/Tour HTTP/1.1
+Content-Type: application/json
+
+####
+DELETE  http://localhost:5050/experiences/delete/6554d4ff394d083a946365da HTTP/1.1
+
+####
 POST  http://localhost:5050/experiences/create HTTP/1.1
 Content-Type: application/json
 
