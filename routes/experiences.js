@@ -56,7 +56,8 @@ experience.get('/experiences', async (req, res) => {
         let query = {};
 
         if (cityName) {
-            const city = await cityModel.findOne({ name: cityName });
+            // const city = await cityModel.findOne({ name: cityName });
+            const city = await cityModel.findOne({ name: { $regex: new RegExp(cityName, 'i') } });
 
             if (city) {
                 const cityId = city._id;
