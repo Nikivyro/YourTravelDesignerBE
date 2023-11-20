@@ -151,7 +151,12 @@ experience.get('/experiences/:experienceId', async (req, res)=> {
 // POST
 experience.post('/experiences/create', async (req, res) => {
     try {
-        const experienceData = req.body; // Dettagli dell'esperienza
+
+        const experienceData = req.body;
+
+        const userId = req.user._id;
+        experienceData.supplier = userId;
+
         // Salva l'esperienza nel database
         const newExperience = new experienceModel(experienceData);
         await newExperience.save();
@@ -405,6 +410,34 @@ experience.get('/experiences/city/:cityName/related/:experienceId', async (req, 
     } catch (error) {
         console.error('Errore nella ricerca per città:', error);
         res.status(500).json({ message: "Errore interno del server" });
+    }
+});
+
+
+// GET ALL by User ID
+experience.get('/experiences/user/:userId', async (req, res) => {
+    try {
+        const userId = req.params.userId;
+        const experiences = await experienceModel.find({ supplier: userId })
+            .populate('supplier')
+            .populate({
+                path: 'location',
+                populate: {
+                    path: 'city',
+                    model: 'citySchema'
+                }
+            });
+
+        res.status(200).send({
+            statusCode: 200,
+            experiences
+        });
+    } catch (error) {
+        console.error('Errore nel recupero delle esperienze per utente:', error);
+        res.status(500).send({
+            statusCode: 500,
+            message: "Errore interno del server"
+        });
     }
 });
 

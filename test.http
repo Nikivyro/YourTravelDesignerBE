@@ -31,7 +31,11 @@ GET  http://localhost:5050/experiences/category/Sport HTTP/1.1
 Content-Type: application/json
 
 ####
-GET  http://localhost:5050/experiences/type/Tour HTTP/1.1
+GET  http://localhost:5050/experiences/type/Pacchetto HTTP/1.1
+Content-Type: application/json
+
+####
+GET  http://localhost:5050/experiences/user/6555d541c64d07ac4a931ad8 HTTP/1.1
 Content-Type: application/json
 
 ####
